@@ -11,14 +11,12 @@ response.raise_for_status()
 soup = BeautifulSoup(response.text, 'html.parser')
 one_of_them = soup.find(name="h3", class_="title")
 all_of_them = soup.find_all(name='h3', class_='title')
-split_list = []
-for x in all_of_them:
-    temp = re.split('[:)]', x.get_text())
-    entry = {'rank': int(temp[0]), 'movie': temp[1]}
-    split_list.append(entry)
-split_list.sort(key=lambda d: d['rank'])
+
+# a more pythonic way discovered so replacing with old
+# code that used lists,str re.splits, and sorting
+movie_titles = [movie.getText() for movie in all_of_them]
+movies = movie_titles[::-1]
+
 with open(file='movies.txt',mode='w') as file:
-    for x in split_list:
-        file.write(f"{x['rank']}) {x['movie']}\n")
-
-
+    for movie in movies:
+        file.write(f"{movie}\n")
